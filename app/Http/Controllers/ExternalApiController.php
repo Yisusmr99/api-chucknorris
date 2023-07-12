@@ -18,9 +18,15 @@ class ExternalApiController extends Controller
             $limit = $request->limit ?? 25;
             $externa_api = new ExternalApi;
             $response = [];
-            for ($i=0; $i < $limit; $i++) { 
+            $existingJokeIds = [];
+
+            while (count($response) < $limit) {
                 $joke = $externa_api->getRandonJoke();
-                array_push($response, $joke);
+
+                if (!in_array($joke->id, $existingJokeIds)) {
+                    $response[] = $joke;
+                    $existingJokeIds[] = $joke->id;
+                }
             }
     
             $this->result = true;
