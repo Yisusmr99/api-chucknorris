@@ -8,7 +8,7 @@ use App\Repositories\ExternalApi;
 class ExternalApiController extends Controller
 {
     protected $result = false;
-    protected $statu_code = 400;
+    protected $status_code = 400;
     protected $message = 'There was a problem with your request';
 
 
@@ -22,7 +22,6 @@ class ExternalApiController extends Controller
 
             while (count($response) < $limit) {
                 $joke = $externa_api->getRandonJoke();
-
                 if (!in_array($joke->id, $existingJokeIds)) {
                     $response[] = $joke;
                     $existingJokeIds[] = $joke->id;
@@ -31,7 +30,7 @@ class ExternalApiController extends Controller
     
             $this->result = true;
             $this->message = 'Query successfully';
-            $this->statu_code = 200;
+            $this->status_code = 200;
 
             $data = [
                 'result' => $this->result,
@@ -39,7 +38,7 @@ class ExternalApiController extends Controller
                 'data' => $response
             ];
             return response()->json($data)
-                ->setStatusCode($this->statu_code);
+                ->setStatusCode($this->status_code);
 
         } catch (\Throwable $th) {
             $this->message = $th->getMessage();
@@ -49,7 +48,7 @@ class ExternalApiController extends Controller
                 'message' => $this->message
             ];
             return response()->json($data)
-                ->setStatusCode($this->statu_code);
+                ->setStatusCode($this->status_code);
         }
     }
 }
